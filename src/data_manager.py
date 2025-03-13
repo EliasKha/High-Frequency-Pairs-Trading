@@ -9,10 +9,10 @@ from histdata import download_hist_data as dl
 from histdata.api import Platform as P, TimeFrame as TF
 
 logging.basicConfig(
-    level=logging.DEBUG,  # Set to DEBUG to capture all messages
+    level=logging.DEBUG,
     format="%(asctime)s - %(levelname)s - %(message)s",
     handlers=[
-        logging.StreamHandler()  # Ensure logs are printed to the console
+        logging.StreamHandler() 
     ]
 )
 
@@ -118,7 +118,6 @@ class DataManager:
             all_data_frames = []
 
             for file in files_to_process:
-                logging.info(10)  
                 df = pd.read_csv(
                     file, 
                     names=['Datetime', 'bid_price', 'ask_price'], 
@@ -126,19 +125,14 @@ class DataManager:
                     dtype={'bid_price': 'float64', 'ask_price': 'float64'}, 
                     low_memory=False
                 )
-                logging.info(100)  
                 all_data_frames.append(df)
-            logging.info(1000)  
 
             all_data = pd.concat(all_data_frames, ignore_index=True)              
             # all_data = pd.concat(
             #     (pd.read_csv(file, names=['Datetime', 'bid_price', 'ask_price'], skiprows=1, dtype={'bid_price': 'float64', 'ask_price': 'float64'}, low_memory=False)
             #      for file in files_to_process), ignore_index=True)
-            logging.info(1)
             all_data['Datetime'] = pd.to_datetime(all_data['Datetime'])
-            logging.info(2)
             all_data.set_index('Datetime', inplace=True)
-            logging.info(3)
             fx_data[pair] = all_data
         logging.info("Finished loading FX data.")
         return fx_data
